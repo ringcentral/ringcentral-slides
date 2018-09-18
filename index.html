@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>RingCentral Polling and Syncing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="./cc/remark-0.4.2.min.js" type="text/javascript">
+      {"highlightStyle": "monokai",
+       "highlightLanguage": "ruby" }
+    </script>
+    <style type="text/css" media="screen">
+      body {
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+        font-weight: 400;
+      }
+      h1, h2, h3 {
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+        font-weight: 400;
+        margin: 5px;
+      }
+      h1 { font-size: 3.5em; }
+      h2 { font-size: 2.3em; }
+      h3 { font-size: 1.6em; }
+      body { font-size: 1.5em; }
+      code { font-size:0.7em; }
+
+      .slide .content {
+        padding: 10px 90px !important;
+      }
+
+      #slideshow .no-highlight {
+        font-size: 0.7em !important;
+      }
+
+      blockquote {
+        font-style: italic;
+        margin: 0.25em 0;
+        padding: 0.25em 40px;
+        line-height: 1.45;
+        position: relative;
+      }
+
+      blockquote:before {
+        opacity: 0.8;
+        display: block;
+        content: "\201C";
+        font-size: 3em;
+        position: absolute;
+        left: -20px;
+        top: -20px;
+      }
+
+      blockquote cite {
+        opacity: 0.8;
+        font-size: 1em;
+        display: block;
+        margin-top: 5px;
+      }
+ 
+      blockquote cite:before {
+        content: "\2014 \2009";
+      }
+
+     /* Two-column layout */
+    .left-column {
+      width: 50%;
+      float: left;
+    }
+    .right-column {
+      width: 50%;
+      float: right;
+    }
+
+    code {
+      -moz-border-radius: 5px;
+      -web-border-radius: 5px;
+      background: #e7e8e2;
+      border-radius: 5px;
+    }
+
+    .inverse {
+      /*background: #272822;*/
+      background: #0073ae;
+    }
+    .inverse h1, .inverse h2, .inverse h3, .inverse h4, .inverse p, .inverse li {
+      color: #f3f3f3;
+      /*line-height: 0.8em;*/
+    }
+    .inverse a {
+      color: cyan;
+    }
+
+    /* slides */
+    .bg-section {
+      background: #272822;
+      font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+      font-weight: 400;
+    }
+    .bg-section p {
+      font-size: 2em;
+    }
+
+    .bg {
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
+
+    .bg-title {
+      background-image:url(images/stack-overflow-2k-coder-cruise-hero.png);
+      background-color: #f3d855;
+    }
+
+    .bg-conference {
+      background-image:url(images/coder-cruise-hero.png);
+      background-color: #fff;
+    }
+
+    .bg-reputation {
+      background-image:url(images/stack-overflow-reputation-grokify.png);
+      background-color: #fff;
+    }
+
+    .bg-awesome {
+      background-image:url(images/awesome.png);
+      background-color: #fff;
+    }
+
+    .bg-happiness {
+      background-image:url(images/positive-friday.jpg);
+      background-color: #fff;
+      color: #fff;
+    }
+
+    .bg-embarassed {
+      background-image:url(images/your-answer-is-terrible.jpg);
+      background-color: #000;
+    }
+
+    .bg-superheroes {
+      background-image:url(images/superheroes.jpg);
+      background-color: #fff;
+    }
+
+    .bg-focus {
+      background-image:url(images/too-many-things-you-do-focus-you-must.jpg);
+      background-color: #000;
+      color: #fff;
+    }
+
+    .bg-question-velocity {
+      background-image:url(images/stack-overflow_question-velocity.png);
+    }
+
+    .bg-question-velocity-results {
+      background-image:url(images/stack-overflow_grokbase_vote-tags.png);
+    }
+
+    .bg-red {
+      background: #A60A17;
+    }
+    .bg-dark {
+      color: white;
+      text-shadow: 0 0 20px #333;
+    }
+    .bg-matz {
+      background-image:url(images/matz.jpeg);
+    }
+
+    </style>
+  </head>
+  <body>
+<!--
+
+name: inverse
+class: center, middle, inverse, bg-dark
+layout: true
+---
+# Stack Overflow
+### 0 to 2000 in 6 Weeks
+
+#### John Wang, aka Grokify
+#### CoderCruise 2018
+---
+
+-->
+    <textarea id="source">
+
+class: middle, center, inverse
+
+<center>
+<img src="images/hero_ringcentral-api-spotlight.png" style="width:100%;height:auto"/>
+</center>
+
+## Polling and Syncing
+
+---
+layout: false
+
+### About Me
+
+* John Wang - aka "Grokify"
+* Sr. Director of Platform for RingCentral
+* Top 50 Contributor (of 900+) to OpenAPI Generator 
+* 5,476 RingCentral Dev Community reputation
+* 6,835 Stack Overflow reputation - Top 0.01%
+
+---
+
+### Agenda
+
+* Use Cases
+* Rate Limiting
+* Polling
+* Syncing
+* Timing
+
+---
+
+class: middle, center, inverse
+
+# Use Cases
+
+---
+
+### Use Cases
+
+1. Archival
+  * Full backup
+  * On-going
+1. Client Apps
+  * Viewing call log or messages in a client app
+  * View recent items
+  * Get new and updated items
+  * Get older items via infinite scroll
+
+#### Scope
+
+* Call Log - Historical Calls
+* Message Store - Incoming and Outgoing Messages (voicemail, SMS, fax)
+
+---
+
+### Account Limits
+
+* Automatic Call Recordings: 90 days or 100,000 messages
+* Inbound Voicemail/Fax: 200 messages
+* Sent Fax: 30 days
+* Text Messages: 500 per folder (Inbox, Outbox, Sent, Deleted)
+
+Full knowledgebase article #1894:
+
+[Message Storage and Account Data Retention](https://success.ringcentral.com/articles/RC_Knowledge_Article/2178)
+
+---
+
+class: middle, center, inverse
+
+# Rate Limits
+
+---
+
+### Rate Limit Types
+
+1. Overall App Rate Limit
+1. API Rate Limits
+
+---
+
+### Overall App Rate Limit
+
+Limit
+
+* 20 requests / second / app / IP address
+* Cannot be increased
+
+Throttled Result
+
+* Status Code: 429
+* Retry-After: 30
+
+Usage
+
+* When receiving 429 HTTP status code, retry the request after the number of seconds specified in the `Retry-After` header.
+
+---
+
+### API Rate Limits
+
+1. Set for app/user pair
+1. Set for API groups (`X-Rate-Limit-Group` header)
+1. Specified in Developer Portal for your app
+1. Contact Dev Support if you need more
+
+<center>
+<img src="images/poll-n-sync_rate-limits.png" style="width:100%;height:auto" />
+</center>
+
+---
+
+### Response Headers
+
+* `X-Rate-Limit-Group`: heavy, medium, light, auth
+* `X-Rate-Limit-Limit`: current rate limit
+* `X-Rate-Limit-Remaining`: remaining in this window
+* `X-Rate-Limit-Window`: window size
+* `Retry-After`: seconds to wait (only with 429)
+
+#### Usage
+
+1. When `X-Rate-Limit-Remaining` reaches `0`, wait the number of seconds specified by `X-Rate-Limit-Window`. You should not receive a 429.
+1. When receiving 429 HTTP status code, retry the request after the number of seconds specified in the `Retry-After` header.
+
+---
+
+### Increasing API Rate Limits
+
+* Sometimes you may need higher limits
+* Contact Dev Support to discuss your use case
+
+#### Dev Support Links
+
+* Support Page: https://developer.ringcentral.com/support.html
+* Create Ticket: https://developer.ringcentral.com/api/support-cases/create
+* Check Tickets: https://developer.ringcentral.com/api/support-cases/check
+
+---
+
+class: middle, center, inverse
+
+# Polling
+
+---
+
+### Polling APIs
+
+Retrieve all call log or message store items to build paged reports
+
+Benefits
+
+* Uses common RFC-3339 time filters: `dateFrom` and `dateTo`, e.g. `2018-01-01T00:00:00Z`
+* Uses common paing approaches: `page` and `perPage` properties
+
+---
+
+### Endpoints
+
+`/restapi/v1.0/account/~/call-log`
+`/restapi/v1.0/account/~/extension/~/call-log`
+`/restapi/v1.0/account/~/extension/~/message-store`
+
+#### Polling query parameters
+
+Interval and paging parameters (others filters exist):
+
+* `dateTo`: default = now, matches `startTime` or `creationTime`
+* `dateFrom`: default = `dateTo` - 24 hrs, matches `startTime`
+* `page`: default = `1`
+* `perPage`: default = `100`, max = `1000`
+
+---
+
+### Example Response
+
+<div style="font-size:70%">
+```
+{
+  "uri":"https://platform.ringcentral.com/restapi/v1.0/account/11111111/ \
+  call-log?view=Simple&showBlocked=true&withRecording=false& \
+  dateFrom=2018-09-17T10:04:00.000Z&page=1&perPage=1",
+  "records":[
+    {
+      "uri":"https://platform.ringcentral.com/restapi/v1.0/account/11111111/ \
+      call-log/BpMupf0GWZPFzUA?view=Simple",
+      "id":"BpMupf0GWZPFzUA",
+      "sessionId":"79486033016",
+      "startTime":"2018-09-18T00:30:21.626Z",
+      ...
+    },
+    ...
+  ],
+  "paging":{ "page":1, "perPage":500, "pageStart":0, "pageEnd":0 },
+  "navigation":{
+    "nextPage":{
+      "uri":"https://platform.ringcentral.com/restapi/v1.0/account/11111111/ \
+      call-log?view=Simple&showBlocked=true&withRecording=false& \
+      dateFrom=2018-09-17T10:04:00.000Z&page=2&perPage=500"
+    },
+    "firstPage":{ "uri":"..." },
+    "lastPage":{ "uri":"..." }
+  }
+}
+```
+</div>
+
+---
+
+### Considerations - Sizing Pages
+
+Medium sized pages return faster than max size.
+
+* `perPage` can be up to a maximum of `1000`
+* Consider sizing smaller, e.g. `200` - `500` for better performance
+
+---
+
+### Considerations - Sizing Intervals
+
+High page numbers will return slower
+
+Use `dateTo` and `dateFrom` intervals to improve response times
+
+* Responses return URLs for: `nextPage`, `previousPage`, `firstPage`, `lastPage`
+* `message-store`, but not `call-log`, returns `totalPages`
+
+---
+
+### Considerations - Date Overlaps
+
+Calls that cross polling date intervals require extra care
+
+* `dateFrom` and `dateTo` act on `startTime`
+* Calls are not entered into `call-log` until just after the call is complete
+* Calls starting and ending across an interval will not be captured with non-overlapping intervals
+* Set your `dateFrom` far back enough to capture calls, e.g. 2 hrs if your calls are less than 2 hrs.
+
+---
+
+### Considerations - Updates
+
+* Updated messages may not be captured.
+* If necesssary, may want to pull messages after average time a user updates their messages, e.g. days.
+
+---
+
+class: middle, center, inverse
+
+# Syncing
+
+---
+
+### Sync APIs
+
+Retrieve all new and updated items since last API retrival using last `syncToken`
+
+Benefits
+
+* Automaticaly get all changes
+* No need to manually handle intervals and paging
+* No need to manually handle start time overlaps
+* No need to manually handle updates
+
+Usage
+
+* Used by RingCentral's own end-user apps
+* Now recommended for archival as well
+
+---
+
+### Endpoints
+
+* `/restapi/v1.0/account/~/call-log-sync`
+* `/restapi/v1.0/account/~/extension/~/call-log-sync`
+* `/restapi/v1.0/account/~/extension/~/message-sync`
+
+#### Syncing query parameters
+
+* `syncType`: Full (`FSync`) or incremental (`ISync`), default to `FSync`
+* `syncToken`: Used for ISync
+* `recordCount`*: Max number of records to return
+
+\* required
+
+---
+
+### Example Response
+
+```
+{
+  "uri":"https://platform.ringcentral.com/restapi/v1.0/account/11111111/ \
+  extension/22222222/call-log-sync?syncType=FSync&recordCount=2",
+  "records":[
+    {
+      "uri":"https://platform.ringcentral.com/restapi/v1.0/account/11111111/ \
+      extension/22222222/call-log/BpMupf0GWZPFzUA?view=Simple",
+      "id":"BpMupf0GWZPFzUA",
+      "sessionId":"79486033016",
+      "startTime":"2018-09-18T00:30:21.626Z",
+      ...
+    },
+    ...
+  ],
+  "syncInfo":{
+    "syncType":"FSync",
+    "syncToken":"FAMAAAFM3nowYAQAAAFl7Seg5ggAAAAAK1aeuA0AAAASgbykSA4AAAFM3...",
+    "syncTime":"2018-09-18T14:48:41.958Z"
+  }
+}
+```
+
+---
+
+### Considerations - Full Sync
+
+Each call returns a max of 250 messages
+
+To get full history, keep calling `ISync` until `records` property is an empty array: `[]`
+
+Useful for:
+
+* Full history
+* Incremental syncs where there are over 250 messages
+
+---
+
+class: middle, center, inverse
+
+# Timing
+
+---
+
+### When to Run?
+
+Periodic Triggers
+
+* Regularly: every 5+ minutes for near real-time
+* Several times / day: high volume inbound voicemail / fax `message-store`
+* Daily archival: once a day for items that don't get deleted
+
+Event-based Triggers
+
+* Message Store: `message-store` event filter
+  * For SMS, no polling may be necessary as you can get full text in the instant message type
+* Call Log: Check `presence` event filter can poll `call-log` 30 seconds after call completion
+* Use delay if you don't need to poll on every update
+
+---
+
+class: inverse
+
+### More Info
+
+Presentation
+
+https://grokify.github.io/ringcentral-polling-and-syncing
+
+Blog
+
+https://medium.com/ringcentral-developers/use-message-sync-api-to-archive-your-sms-fax-and-voicemail-messages-cd23748e188f
+
+Example App
+
+https://github.com/embbnux/ringcentral-message-sync-demo
+
+---
+
+class: inverse
+
+### Thank you
+
+RingCentral Developers
+
+* https://developer.ringcentral.com
+* https://github.com/ringcentral
+* https://github.com/ringcentral-tutorials
+* https://medium.com/ringcentral-developers
+* https://twitter.com/ringcentraldevs
+
+Reach Me
+
+* https://twitter.com/grokify
+* https://github.com/grokify
+
+    </textarea>
+    <div id="slideshow"></div>
+  </body>
+</html>
