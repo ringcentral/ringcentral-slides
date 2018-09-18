@@ -2,7 +2,9 @@
 
 View: https://grokify.github.io/ringcentral-polling-and-syncing/
 
-This presentation is written in Markdown and built using [remark](https://github.com/gnab/remark)
+This presentation is written in Markdown and built using [remark](https://github.com/gnab/remark). The Markdown content for all the slides is in the `index.html` file:
+
+https://github.com/grokify/ringcentral-polling-and-syncing/blob/master/index.html
 
 ## Additional Resources
 
