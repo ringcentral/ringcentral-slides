@@ -12,3 +12,8 @@ https://github.com/grokify/ringcentral-polling-and-syncing/blob/master/index.htm
 
 * Blog: https://medium.com/ringcentral-developers/use-message-sync-api-to-archive-your-sms-fax-and-voicemail-messages-cd23748e188f
 * Demo (JS): https://github.com/embbnux/ringcentral-message-sync-demo
+
+## Credits
+
+* https://github.com/gnab/remark
+* https://github.com/tholman/github-corners
