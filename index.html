@@ -332,7 +332,7 @@ class: middle, center, inverse
 
 ---
 
-### Polling APIs
+### Polling Overview
 
 Retrieve all call log or message store items to build paged reports
 
@@ -345,9 +345,9 @@ Benefits
 
 ### Endpoints
 
-`/restapi/v1.0/account/~/call-log`
-`/restapi/v1.0/account/~/extension/~/call-log`
-`/restapi/v1.0/account/~/extension/~/message-store`
+[`/restapi/v1.0/account/~/call-log`](https://developer.ringcentral.com/api-docs/latest/index.html#!#RefCompanyCallLog.html) - [try](https://developer.ringcentral.com/api-explorer/latest/index.html#/!/Call_Log/loadAccountCallLog)
+[`/restapi/v1.0/account/~/extension/~/call-log`](https://developer.ringcentral.com/api-docs/latest/index.html#!#RefUserCallLog.html) - [try](https://developer.ringcentral.com/api-explorer/latest/index.html#/!/Call_Log/loadExtensionCallLog)
+[`/restapi/v1.0/account/~/extension/~/message-store`](https://developer.ringcentral.com/api-docs/latest/index.html#!#RefMessageList.html) - [try](https://developer.ringcentral.com/api-explorer/latest/index.html#/!/SMS_and_MMS/listMessages)
 
 #### Polling query parameters
 
@@ -439,7 +439,7 @@ class: middle, center, inverse
 
 ---
 
-### Sync APIs
+### Syncing Overview
 
 Retrieve all new and updated items since last API retrival using last `syncToken`
 
@@ -459,9 +459,9 @@ Usage
 
 ### Endpoints
 
-* `/restapi/v1.0/account/~/call-log-sync`
-* `/restapi/v1.0/account/~/extension/~/call-log-sync`
-* `/restapi/v1.0/account/~/extension/~/message-sync`
+* [`/restapi/v1.0/account/~/call-log-sync`](https://developer.ringcentral.com/api-docs/latest/index.html#!#RefCompanyCallLogSync.html) - [try](https://developer.ringcentral.com/api-explorer/latest/index.html#/!/Call_Log/syncAccountCallLog)
+* [`/restapi/v1.0/account/~/extension/~/call-log-sync`](https://developer.ringcentral.com/api-docs/latest/index.html#!#RefUserCallLogSync.html) - [try](https://developer.ringcentral.com/api-explorer/latest/index.html#/!/Call_Log/syncExtensionCallLog)
+* [`/restapi/v1.0/account/~/extension/~/message-sync`](https://developer.ringcentral.com/api-docs/latest/index.html#!#RefMessageSync.html) - [try](https://developer.ringcentral.com/api-explorer/latest/index.html#/!/SMS_and_MMS/syncMessages)
 
 #### Syncing query parameters
 
@@ -500,7 +500,7 @@ Usage
 
 ---
 
-### Considerations - Full Sync
+### Considerations
 
 Each call returns a max of 250 messages
 
