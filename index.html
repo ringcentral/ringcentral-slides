@@ -440,7 +440,10 @@ To avoid this, perform `ISync` quickly enough so that you do not exceed the 250 
 
 ### Considerations - Old Messages
 
-To perform a full historical sync, after you call `FSync`, continue to call `ISync` with `syncToken` and `recordCount=250` until `records` property is an empty array: `[]` at which time there will be no more messages.
+To perform a full historical sync, peform the following steps:
+
+1. First call `FSync`
+1. Call `ISync` with `syncToken` and `recordCount=250` until `records` property is an empty array: `[]` at which time there will be no more messages.
 
 ---
 
