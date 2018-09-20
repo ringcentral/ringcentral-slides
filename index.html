@@ -430,7 +430,7 @@ Usage
 
 ### Considerations - New Messages
 
-An `ISync` for new and updated messages (with `syncToken` but without `recordCount`) will return up to 250 new messages since your lsat sync.
+An `ISync` for new and updated messages (with `syncToken` but without `recordCount`) will return up to 250 new messages since your last sync.
 
 If there are more than 250 new or updated messages, an error will be returned and a new `FSync` will be required.
 
