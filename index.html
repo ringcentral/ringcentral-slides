@@ -430,15 +430,15 @@ Usage
 
 ### Considerations - Over 250 New Messages
 
-A `ISync` for new messages (with `syncToken` but without `recordCount`) will return new messages since your lsat sync.
+An `ISync` for new and updated messages (with `syncToken` but without `recordCount`) will return up to 250 new messages since your lsat sync.
 
-If there are more than 250 new or updated messages since the last sync, you will receive an error and need to start with a new `FSync`.
+If there are more than 250 new or updated messages, an error will be returned and a new `FSync` will be required.
 
-To avoid this, perform `ISync` calls for new messages quickly enough so that you do not exceed the 250 max number of messages from your last sync. You can subscribe for events and perform an `ISync` for each event you receive. See the Trigging section for more info on which events to subscribe to. 
+To avoid this, perform `ISync` for new messages quickly enough so that you do not exceed the 250 max number of messages from your last sync. See the Trigging section for info on subscribing to events when new messages arrive.
 
 ---
 
-### Considerations - Full Historical Sync
+### Considerations - Over 250 Old Messages
 
 To perform a full historical sync, after you call `FSync`, continue to call `ISync` with `syncToken` and `recordCount=250` until `records` property is an empty array: `[]` at which time there will be no more messages.
 
@@ -452,8 +452,6 @@ class: middle, center, inverse
 
 ### When to Run?
 
-Periodic Triggers
-
 * Regularly: every 5+ minutes for near real-time
 * Several times / day: high volume inbound voicemail / fax `message-store`
 * Daily archival: once a day, often at night
@@ -464,6 +462,14 @@ Event-based Triggers
   * For SMS, no polling may be necessary as you can get full text in the instant message type
 * Call Log: Check `presence` event filter can poll `call-log` 30 seconds after call completion
 * Use delay if you don't need to poll on every update
+
+---
+
+### Best Practices
+
+1. Use the Syncing API
+1. Subscribe to relevant `message-store` and `presence` events and perform `ISync` after receiving an event
+1. Automatically run an `ISync` if a certain amount of time has elapsed without an event, e.g. 30 minutes.
 
 ---
 
