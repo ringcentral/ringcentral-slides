@@ -428,17 +428,17 @@ Usage
 
 ---
 
-### Considerations - 250+ New Messages
+### Considerations - New Messages
 
 An `ISync` for new and updated messages (with `syncToken` but without `recordCount`) will return up to 250 new messages since your lsat sync.
 
 If there are more than 250 new or updated messages, an error will be returned and a new `FSync` will be required.
 
-To avoid this, perform `ISync` for new messages quickly enough so that you do not exceed the 250 max number of messages from your last sync. See the Trigging section for info on subscribing to events when new messages arrive.
+To avoid this, perform `ISync` quickly enough so that you do not exceed the 250 max number of messages from the last sync. See the Trigging section for info on subscribing to events when new messages arrive.
 
 ---
 
-### Considerations - 250+ Old Messages
+### Considerations - Old Messages
 
 To perform a full historical sync, after you call `FSync`, continue to call `ISync` with `syncToken` and `recordCount=250` until `records` property is an empty array: `[]` at which time there will be no more messages.
 
