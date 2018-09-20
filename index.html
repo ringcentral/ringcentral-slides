@@ -430,14 +430,15 @@ Usage
 
 ### Considerations
 
-Each call returns a max of 250 messages
+Each call returns a max of 250 messages.
 
-To get full history, keep calling `ISync` until `records` property is an empty array: `[]`
+Full historical download
 
-Useful for:
+* To get full history with over 250 messages, keep calling `ISync` with `recordCount=250` until `records` property is an empty array: `[]`
 
-* Full history
-* Incremental syncs where there are over 250 messages
+Large number of new messages
+
+* If you perform an `ISync` with `syncToken` only, you will receive new messages. If there are more than 250 new and updated messages from your last sync you will receive an error and will need to start with a new `FSync`. This can happen if building a client app and the user doesn't use the app for some time, e.g. long holiday.
 
 ---
 
