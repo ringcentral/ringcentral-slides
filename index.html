@@ -428,6 +428,14 @@ Usage
 
 ---
 
+### Considerations - Duplicates
+
+Syncing will ensure that you never miss a message, but to accomplish this, it may return duplicate messages, e.g. `ISync` may return a message that was in a previous sync.
+
+Be sure to de-duplicate messages in your app.
+
+---
+
 ### Considerations - New Messages
 
 An `ISync` for new and updated messages (with `syncToken` but without `recordCount`) will return up to 250 new messages since your last sync.
@@ -464,7 +472,7 @@ Event-based Triggers
 * Message Store: `message-store` event filter
   * For SMS, no polling may be necessary as you can get full text in the instant message type
 * Call Log: Check `presence` event filter can poll `call-log` 30 seconds after call completion
-* Use delay if you don't need to poll on every update
+* For polling, use date filters to prevent receiving too many duplicates
 
 ---
 
